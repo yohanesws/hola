@@ -66,7 +66,7 @@ public class HolaService {
     private String getBonjourResponse() throws IOException {
         RequestConfig requestConfig = RequestConfig.custom()
             .setConnectTimeout(2000)
-            .setConnectionRequestTimeout(5000)
+            .setConnectionRequestTimeout(2000)
             .build();
         HttpGet httpGet = new HttpGet("http://bonjour:8080/bonjour-chaining");
         httpGet.setConfig(requestConfig);
