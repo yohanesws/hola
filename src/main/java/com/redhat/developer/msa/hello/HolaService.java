@@ -52,6 +52,7 @@ public class HolaService {
     @Path("/hola-chaining")
     public String sayHelloChaining() {
         JsonArrayBuilder jab = Json.createArrayBuilder();
+        jab.add(sayHello());
         try {
             String bonJourResponse = getBonjourResponse();
             JsonArray responseArray = Json.createReader(new StringReader(bonJourResponse)).readArray();
@@ -59,7 +60,6 @@ public class HolaService {
         } catch (Exception e) {
             jab.add("Error: " + e.getMessage());
         }
-        jab.add(sayHello());
         return jab.build().toString();
     }
 
