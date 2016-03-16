@@ -84,9 +84,15 @@
 		<!-- Add WildFly Swarm dependency -->
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs</artifactId>
+			<artifactId>jaxrs-jsonp</artifactId>
 		</dependency>
 
+		<!-- Add Apache HTTP Client (for chaining invocation) -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -14,6 +14,4 @@ Build and Deploy hola
 Access the application
 ----------------------
 
-The application will be running at the following URL:
-
-http://localhost:8080/rest/hola
+The application will be running at the following URL: <http://localhost:8080/rest/hola>
