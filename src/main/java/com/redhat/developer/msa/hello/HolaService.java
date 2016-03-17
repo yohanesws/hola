@@ -43,7 +43,7 @@ public class HolaService {
         try {
             hostname = InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
-            hostname = "[local host name could not be resolved into an address]";
+            hostname = "unknown";
         }
         return "Hola de " + hostname;
     }
@@ -58,7 +58,7 @@ public class HolaService {
             JsonArray responseArray = Json.createReader(new StringReader(bonJourResponse)).readArray();
             responseArray.forEach(service -> jab.add(service));
         } catch (Exception e) {
-            jab.add("Error: " + e.getMessage());
+            jab.add("Generic Bonjour response");
         }
         return jab.build().toString();
     }
