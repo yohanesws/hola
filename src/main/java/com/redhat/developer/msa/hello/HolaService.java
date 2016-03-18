@@ -58,7 +58,7 @@ public class HolaService {
             JsonArray responseArray = Json.createReader(new StringReader(bonJourResponse)).readArray();
             responseArray.forEach(service -> jab.add(service));
         } catch (Exception e) {
-            jab.add("Generic Bonjour response");
+            jab.add("Generic Bonjour response (Fallback!)");
         }
         return jab.build().toString();
     }
@@ -68,7 +68,7 @@ public class HolaService {
             .setConnectTimeout(2000)
             .setConnectionRequestTimeout(2000)
             .build();
-        HttpGet httpGet = new HttpGet("http://bonjour:8080/bonjour-chaining");
+        HttpGet httpGet = new HttpGet("http://bonjour:8080/api/bonjour-chaining");
         httpGet.setConfig(requestConfig);
         HttpClient httpClient = HttpClientBuilder.create().build();
         return EntityUtils.toString(httpClient.execute(httpGet).getEntity());
