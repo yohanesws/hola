@@ -14,21 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.redhat.developer.msa.hello;
+package com.redhat.developers.msa.hola;
 
-import java.io.IOException;
+import feign.RequestLine;
 
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.ext.Provider;
+import java.util.List;
 
-@Provider
-public class CorsFilter implements ContainerResponseFilter {
+public interface ChainedGreeting {
 
-    @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
-    }
+	@RequestLine("GET /")
+	public List<String> greetings();
 
 }

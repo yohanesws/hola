@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.redhat.developer.msa.hello;
+package com.redhat.developers.msa.hola;
 
 import com.netflix.hystrix.HystrixCommandProperties;
 import feign.hystrix.HystrixFeign;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Path("/")
 public class HolaResource {
 
 	/**
