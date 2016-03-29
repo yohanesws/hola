@@ -60,7 +60,7 @@ public class HolaResource {
 	public List<String> holaChaining() {
 		List<String> greetings = new ArrayList<>();
 		greetings.add(hola());
-		greetings.addAll(createFeign().aloha());
+		greetings.addAll(getNextService().aloha());
 		return greetings;
 	}
 
@@ -70,7 +70,7 @@ public class HolaResource {
 	 *
 	 * @return The feign pointing to the service URL and with Hystrix fallback.
 	 */
-	private AlohaService createFeign() {
+	private AlohaService getNextService() {
 		return HystrixFeign.builder()
 		    .logger(new Logger.ErrorLogger()).logLevel(Level.BASIC)
 		    .decoder(new JacksonDecoder())
