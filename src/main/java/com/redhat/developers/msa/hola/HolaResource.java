@@ -16,15 +16,20 @@
  */
 package com.redhat.developers.msa.hola;
 
-import com.netflix.hystrix.HystrixCommandProperties;
-import feign.hystrix.HystrixFeign;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import com.netflix.config.ConfigurationManager;
+
+import feign.Logger;
+import feign.Logger.Level;
+import feign.hystrix.HystrixFeign;
+import feign.jackson.JacksonDecoder;
 
 @Path("/")
 public class HolaResource {
@@ -32,13 +37,13 @@ public class HolaResource {
 	/**
 	 * The next REST endpoint URL of the service chain to be called.
 	 */
-	private static final String NEXT_ENDPOINT_URL = "http://aloha:8080/api/aloha-chaining";
+	private static final String NEXT_ENDPOINT_URL = "http://aloha:8080/";
 
 	/**
 	 * Setting Hystrix timeout for the chain in 500ms (we have 2 more chained service calls).
 	 */
 	static {
-		HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(500);
+	    ConfigurationManager.getConfigInstance().setProperty("hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", 500);
 	}
 
 	@GET
@@ -55,7 +60,7 @@ public class HolaResource {
 	public List<String> holaChaining() {
 		List<String> greetings = new ArrayList<>();
 		greetings.add(hola());
-		greetings.addAll(createFeign().greetings());
+		greetings.addAll(createFeign().aloha());
 		return greetings;
 	}
 
@@ -65,8 +70,11 @@ public class HolaResource {
 	 *
 	 * @return The feign pointing to the service URL and with Hystrix fallback.
 	 */
-	private ChainedGreeting createFeign() {
-		return HystrixFeign.builder().target(ChainedGreeting.class, NEXT_ENDPOINT_URL,
+	private AlohaService createFeign() {
+		return HystrixFeign.builder()
+		    .logger(new Logger.ErrorLogger()).logLevel(Level.BASIC)
+		    .decoder(new JacksonDecoder())
+		    .target(AlohaService.class, NEXT_ENDPOINT_URL,
 				() -> Collections.singletonList("Aloha response (fallback)"));
 	}
 
