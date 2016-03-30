@@ -24,8 +24,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import com.netflix.config.ConfigurationManager;
-
 import feign.Logger;
 import feign.Logger.Level;
 import feign.hystrix.HystrixFeign;
@@ -34,48 +32,36 @@ import feign.jackson.JacksonDecoder;
 @Path("/")
 public class HolaResource {
 
-	/**
-	 * The next REST endpoint URL of the service chain to be called.
-	 */
-	private static final String NEXT_ENDPOINT_URL = "http://aloha:8080/";
+    @GET
+    @Path("/hola")
+    @Produces("text/plain")
+    public String hola() {
+        String hostname = System.getenv().getOrDefault("HOSTNAME", "unknown");
+        return String.format("Hola de %s", hostname);
+    }
 
-	/**
-	 * Setting Hystrix timeout for the chain in 500ms (we have 2 more chained service calls).
-	 */
-	static {
-	    ConfigurationManager.getConfigInstance().setProperty("hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", 500);
-	}
+    @GET
+    @Path("/hola-chaining")
+    @Produces("application/json")
+    public List<String> holaChaining() {
+        List<String> greetings = new ArrayList<>();
+        greetings.add(hola());
+        greetings.addAll(getNextService().alohaChaining());
+        return greetings;
+    }
 
-	@GET
-	@Path("/hola")
-	@Produces("text/plain")
-	public String hola() {
-		String hostname = System.getenv().getOrDefault("HOSTNAME", "unknown");
-		return String.format("Hola de %s", hostname);
-	}
-
-	@GET
-	@Path("/hola-chaining")
-	@Produces("application/json")
-	public List<String> holaChaining() {
-		List<String> greetings = new ArrayList<>();
-		greetings.add(hola());
-		greetings.addAll(getNextService().aloha());
-		return greetings;
-	}
-
-	/**
-	 * This is were the "magic" happens: it creates a Feign, which is a proxy interface for remote
-	 * calling a REST endpoint with Hystrix fallback support.
-	 *
-	 * @return The feign pointing to the service URL and with Hystrix fallback.
-	 */
-	private AlohaService getNextService() {
-		return HystrixFeign.builder()
-		    .logger(new Logger.ErrorLogger()).logLevel(Level.BASIC)
-		    .decoder(new JacksonDecoder())
-		    .target(AlohaService.class, NEXT_ENDPOINT_URL,
-				() -> Collections.singletonList("Aloha response (fallback)"));
-	}
+    /**
+     * This is were the "magic" happens: it creates a Feign, which is a proxy interface for remote calling a REST endpoint with
+     * Hystrix fallback support.
+     *
+     * @return The feign pointing to the service URL and with Hystrix fallback.
+     */
+    private AlohaService getNextService() {
+        return HystrixFeign.builder()
+            .logger(new Logger.ErrorLogger()).logLevel(Level.BASIC)
+            .decoder(new JacksonDecoder())
+            .target(AlohaService.class, "http://aloha:8080/",
+                () -> Collections.singletonList("Aloha response (fallback)"));
+    }
 
 }

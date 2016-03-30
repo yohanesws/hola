@@ -23,6 +23,6 @@ import java.util.List;
 public interface AlohaService {
 
 	@RequestLine("GET /api/aloha-chaining")
-	public List<String> aloha();
+	public List<String> alohaChaining();
 
 }
