@@ -26,7 +26,7 @@
 	<name>Red Hat MSA: hola</name>
 	<description>Hello microservice using WildFly Swarm</description>
 
-	<url>http://developer.redhat.com/</url>
+	<url>https://developers.redhat.com/</url>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
