@@ -1,9 +1,10 @@
+package com.redhat.developers.msa.hola;
 /**
  * JBoss, Home of Professional Open Source
  * Copyright 2016, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,15 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.redhat.developers.msa.hola;
 
-import feign.RequestLine;
 
-import java.util.List;
+import javax.enterprise.inject.Produces;
+import javax.inject.Singleton;
 
-public interface AlohaService {
+import com.github.kristofa.brave.Brave;
+import com.github.kristofa.brave.EmptySpanCollectorMetricsHandler;
+import com.github.kristofa.brave.http.HttpSpanCollector;
 
-	@RequestLine("GET /api/aloha-chaining")
-	public List<String> aloha();
+/**
+ * This class uses CDI to alias Zipkin resources to CDI beans
+ *
+ */
+public class ZipkinResource {
+
+    @Produces
+    @Singleton
+    public Brave getBrave() {
+        Brave brave = new Brave.Builder("hola")
+            .spanCollector(HttpSpanCollector.create("http://zipkin-query:9411", new EmptySpanCollectorMetricsHandler()))
+            .build();
+        return brave;
+    }
 
 }
