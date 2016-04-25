@@ -70,6 +70,7 @@ public class HolaResource {
 
     @GET
     @Path("/health")
+    @Produces("text/plain")
     @ApiOperation("Used to verify the health of the service")
     public String health() {
         return "I'm ok";
