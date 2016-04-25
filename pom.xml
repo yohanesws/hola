@@ -60,6 +60,7 @@
 		<netflix.feign.version>8.15.1</netflix.feign.version>
 		<hystrix.version>1.5.1</hystrix.version>
 		<brave.version>3.5.0</brave.version>
+		<swagger.version>1.5.8</swagger.version>
 
 
 		<!-- fabric8 version -->
@@ -190,6 +191,14 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.5.1</version>
 		</dependency>
+
+		<!-- Swagger -->
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-jaxrs</artifactId>
+			<version>${swagger.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -40,6 +40,7 @@ import feign.Logger.Level;
 import feign.httpclient.ApacheHttpClient;
 import feign.hystrix.HystrixFeign;
 import feign.jackson.JacksonDecoder;
+import io.swagger.annotations.ApiOperation;
 
 @Path("/")
 public class HolaResource {
@@ -50,6 +51,7 @@ public class HolaResource {
     @GET
     @Path("/hola")
     @Produces("text/plain")
+    @ApiOperation("Returns the greeting in Spanish")
     public String hola() {
         String hostname = System.getenv().getOrDefault("HOSTNAME", "unknown");
         return String.format("Hola de %s", hostname);
@@ -58,6 +60,7 @@ public class HolaResource {
     @GET
     @Path("/hola-chaining")
     @Produces("application/json")
+    @ApiOperation("Returns the greeting plus the next service in the chain")
     public List<String> holaChaining() {
         List<String> greetings = new ArrayList<>();
         greetings.add(hola());
@@ -67,6 +70,7 @@ public class HolaResource {
 
     @GET
     @Path("/health")
+    @ApiOperation("Used to verify the health of the service")
     public String health() {
         return "I'm ok";
     }
