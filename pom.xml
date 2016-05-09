@@ -43,11 +43,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- JBoss dependency versions -->
-		<version.wildfly.swarm>1.0.0.Beta6</version.wildfly.swarm>
-
-		<!-- Define the version of the JBoss BOMs we want to import to specify
-			tested stacks. -->
-		<version.jboss.bom>10.0.0.Final</version.jboss.bom>
+		<version.wildfly.swarm>1.0.0.Beta8</version.wildfly.swarm>
 
 		<!-- other plugin versions -->
 		<version.compiler.plugin>3.1</version.compiler.plugin>
@@ -107,13 +103,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<dependency>
-				<groupId>org.wildfly.bom</groupId>
-				<artifactId>wildfly-javaee7</artifactId>
-				<version>${version.jboss.bom}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -124,7 +113,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs-weld</artifactId>
+			<artifactId>jaxrs-cdi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.netflix.feign</groupId>
@@ -158,16 +147,6 @@
 			<groupId>com.netflix.hystrix</groupId>
 			<artifactId>hystrix-metrics-event-stream</artifactId>
 			<version>${hystrix.version}</version>
-		</dependency>
-
-		<!-- We need a Servlet to enable hystrix-metrics-event-stream -->
-		<dependency>
-			<groupId>org.jboss.spec.javax.servlet</groupId>
-			<artifactId>jboss-servlet-api_3.1_spec</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.spec.javax.annotation</groupId>
-			<artifactId>jboss-annotations-api_1.2_spec</artifactId>
 		</dependency>
 
 		<!-- Brave Zipkin -->
