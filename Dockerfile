@@ -5,4 +5,4 @@ ENV AB_JOLOKIA_OFF true
 
 EXPOSE 8080
 
-ADD target/hola-swarm.jar /app
+ADD target/hola-swarm.jar /app/
