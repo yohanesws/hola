@@ -61,7 +61,7 @@
 
 		<!-- fabric8 version -->
 		<fabric8.version>2.2.105</fabric8.version>
-		<docker.maven.plugin.version>0.14.2</docker.maven.plugin.version>
+		<docker.maven.plugin.version>0.15.8</docker.maven.plugin.version>
 
 		<!-- Docker & Fabric8 Configs -->
 		<docker.from>fabric8/java-jboss-openjdk8-jdk:1.0.10</docker.from>
@@ -81,6 +81,8 @@
 
 		<!-- WildFly Swarm 6 has issues with Jolokia. We have to disable it -->
 		<fabric8.env.AB_JOLOKIA_OFF>true</fabric8.env.AB_JOLOKIA_OFF>
+		<!-- See https://github.com/docker/docker/issues/15020 -->
+		<fabric8.env.MALLOC_ARENA_MAX>4</fabric8.env.MALLOC_ARENA_MAX>
 
 		<!-- Readiness Probe -->
 		<fabric8.readinessProbe.httpGet.path>/api/health</fabric8.readinessProbe.httpGet.path>
