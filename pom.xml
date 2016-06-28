@@ -43,7 +43,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- JBoss dependency versions -->
-		<version.wildfly.swarm>1.0.0.CR2</version.wildfly.swarm>
+		<version.wildfly.swarm>1.0.0.Final</version.wildfly.swarm>
 
 		<!-- other plugin versions -->
 		<version.compiler.plugin>3.1</version.compiler.plugin>
@@ -64,7 +64,7 @@
 		<docker.maven.plugin.version>0.15.8</docker.maven.plugin.version>
 
 		<!-- Docker & Fabric8 Configs -->
-		<docker.from>fabric8/java-jboss-openjdk8-jdk:1.0.10</docker.from>
+		<docker.from>fabric8/java-jboss-openjdk8-jdk:1.0.13</docker.from>
 		<fabric8.dockerUser>redhatmsa/</fabric8.dockerUser>
 		<docker.image>${fabric8.dockerUser}${project.artifactId}:${project.version}</docker.image>
 		<docker.port.container.jolokia>8778</docker.port.container.jolokia>
