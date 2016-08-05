@@ -19,12 +19,14 @@ package com.redhat.developers.msa.hola;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
@@ -54,7 +56,15 @@ public class HolaResource {
     @ApiOperation("Returns the greeting in Spanish")
     public String hola() {
         String hostname = System.getenv().getOrDefault("HOSTNAME", "unknown");
-        return String.format("Hola de %s", hostname);
+        String translation = ConfigResolver
+            .resolve("hello")
+            .withDefault("Hola de %s")
+            .logChanges(true)
+            // 5 Seconds cache only for demo purpose
+            .cacheFor(TimeUnit.SECONDS, 5)
+            .getValue();
+        return String.format(translation, hostname);
+
     }
 
     @GET

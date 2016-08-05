@@ -45,6 +45,9 @@
 		<!-- JBoss dependency versions -->
 		<version.wildfly.swarm>1.0.0.Final</version.wildfly.swarm>
 
+		<!-- DeltaSpike - Used for configuration -->
+		<deltaspike.version>1.6.1</deltaspike.version>
+
 		<!-- other plugin versions -->
 		<version.compiler.plugin>3.1</version.compiler.plugin>
 		<version.surefire.plugin>2.16</version.surefire.plugin>
@@ -64,7 +67,7 @@
 		<docker.maven.plugin.version>0.15.8</docker.maven.plugin.version>
 
 		<!-- Docker & Fabric8 Configs -->
-		<docker.from>fabric8/java-jboss-openjdk8-jdk:1.0.10</docker.from>
+		<docker.from>fabric8/java-jboss-openjdk8-jdk:1.1.7</docker.from>
 		<fabric8.dockerUser>redhatmsa/</fabric8.dockerUser>
 		<docker.image>${fabric8.dockerUser}${project.artifactId}:${project.version}</docker.image>
 		<docker.port.container.jolokia>8778</docker.port.container.jolokia>
@@ -79,10 +82,10 @@
 		<fabric8.label.hystrix.enabled>true</fabric8.label.hystrix.enabled>
 		<fabric8.iconRef>icons/wildfly</fabric8.iconRef>
 
-		<!-- WildFly Swarm 6 has issues with Jolokia. We have to disable it -->
-		<fabric8.env.AB_JOLOKIA_OFF>true</fabric8.env.AB_JOLOKIA_OFF>
-		<!-- See https://github.com/docker/docker/issues/15020 -->
-		<fabric8.env.MALLOC_ARENA_MAX>4</fabric8.env.MALLOC_ARENA_MAX>
+		<!-- WildFly Swarm has issues with Jolokia. We have to disable it.
+			See: https://issues.jboss.org/browse/SWARM-204 -->
+		<fabric8.env.AB_OFF>true</fabric8.env.AB_OFF>
+		<fabric8.env.JAVA_OPTIONS>-Xmx512m</fabric8.env.JAVA_OPTIONS>
 
 		<!-- Readiness Probe -->
 		<fabric8.readinessProbe.httpGet.path>/api/health</fabric8.readinessProbe.httpGet.path>
@@ -105,6 +108,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.deltaspike.distribution</groupId>
+				<artifactId>distributions-bom</artifactId>
+				<version>${deltaspike.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -117,6 +127,21 @@
 			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>jaxrs-cdi</artifactId>
 		</dependency>
+
+		<!-- DeltaSpike -->
+		<dependency>
+			<groupId>org.apache.deltaspike.core</groupId>
+			<artifactId>deltaspike-core-api</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.deltaspike.core</groupId>
+			<artifactId>deltaspike-core-impl</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- Feign -->
 		<dependency>
 			<groupId>com.netflix.feign</groupId>
 			<artifactId>feign-core</artifactId>
