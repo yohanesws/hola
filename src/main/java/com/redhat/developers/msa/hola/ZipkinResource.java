@@ -34,7 +34,8 @@ public class ZipkinResource {
     @Singleton
     public Brave getBrave() {
         Brave brave = new Brave.Builder("hola")
-            .spanCollector(HttpSpanCollector.create("http://zipkin-query:9411", new EmptySpanCollectorMetricsHandler()))
+            .spanCollector(HttpSpanCollector.create(System.getenv("ZIPKIN_SERVER_URL"),
+            		new EmptySpanCollectorMetricsHandler()))
             .build();
         return brave;
     }
