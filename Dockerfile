@@ -1,4 +1,4 @@
-FROM fabric8/java-jboss-openjdk8-jdk:1.1.7
+FROM fabric8/java-jboss-openjdk8-jdk:1.2.1
 
 ENV JAVA_APP_JAR hola-swarm.jar
 ENV AB_OFF true
@@ -7,4 +7,4 @@ ENV ZIPKIN_SERVER_URL http://zipkin-query:9411
 
 EXPOSE 8080
 
-ADD target/hola-swarm.jar /app/
+ADD target/hola-swarm.jar /deployments/
