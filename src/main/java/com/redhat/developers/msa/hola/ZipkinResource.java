@@ -16,11 +16,11 @@ package com.redhat.developers.msa.hola;
  * limitations under the License.
  */
 
-
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
 import com.github.kristofa.brave.Brave;
+import com.github.kristofa.brave.Brave.Builder;
 import com.github.kristofa.brave.EmptySpanCollectorMetricsHandler;
 import com.github.kristofa.brave.http.HttpSpanCollector;
 
@@ -33,11 +33,17 @@ public class ZipkinResource {
     @Produces
     @Singleton
     public Brave getBrave() {
-        Brave brave = new Brave.Builder("hola")
-            .spanCollector(HttpSpanCollector.create(System.getenv("ZIPKIN_SERVER_URL"),
-            		new EmptySpanCollectorMetricsHandler()))
-            .build();
-        return brave;
+        String zipkingServer = System.getenv("ZIPKIN_SERVER_URL");
+        Builder builder = new Brave.Builder("hola");
+        if (null == zipkingServer) {
+            // Default configuration
+            return builder.build();
+        } else {
+            // Brave configured for a Server
+            return builder.spanCollector(HttpSpanCollector.create(System.getenv("ZIPKIN_SERVER_URL"),
+                new EmptySpanCollectorMetricsHandler()))
+                .build();
+        }
     }
 
 }

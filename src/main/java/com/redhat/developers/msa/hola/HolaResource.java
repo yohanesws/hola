@@ -22,13 +22,19 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
 
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ServerSpan;
@@ -48,6 +54,12 @@ public class HolaResource {
 
     @Inject
     private Brave brave;
+
+    @Context
+    private SecurityContext securityContext;
+
+    @Context
+    private HttpServletRequest servletRequest;
 
     @GET
     @Path("/hola")
@@ -75,6 +87,34 @@ public class HolaResource {
         greetings.add(hola());
         greetings.addAll(getNextService().aloha());
         return greetings;
+    }
+
+    @GET
+    @Path("/hola-secured")
+    @Produces("text/plain")
+    @ApiOperation("Returns a message that is only available for authenticated users")
+    public String holaSecured() {
+        // this will set the user id as userName
+        String userName = securityContext.getUserPrincipal().getName();
+
+        if (securityContext.getUserPrincipal() instanceof KeycloakPrincipal) {
+            @SuppressWarnings("unchecked")
+            KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>) securityContext.getUserPrincipal();
+
+            // this is how to get the real userName (or rather the login name)
+            userName = kp.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+        }
+        return "This is a Secured resource. You are loged as " + userName;
+
+    }
+
+    @GET
+    @Path("/logout")
+    @Produces("text/plain")
+    @ApiOperation("Returns a message that is only available for authenticated users")
+    public String logout() throws ServletException {
+        servletRequest.logout();
+        return "Logged out";
     }
 
     @GET

@@ -43,7 +43,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- JBoss dependency versions -->
-		<version.wildfly.swarm>2016.10.0</version.wildfly.swarm>
+		<version.wildfly.swarm>2016.11.0</version.wildfly.swarm>
 
 		<!-- DeltaSpike - Used for configuration -->
 		<deltaspike.version>1.6.1</deltaspike.version>
@@ -127,6 +127,10 @@
 			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>jaxrs-cdi</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>keycloak</artifactId>
+		</dependency>
 
 		<!-- DeltaSpike -->
 		<dependency>
@@ -140,7 +144,7 @@
 			<artifactId>deltaspike-core-impl</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<!-- Feign -->
 		<dependency>
 			<groupId>com.netflix.feign</groupId>
@@ -231,6 +235,9 @@
 				<groupId>org.wildfly.swarm</groupId>
 				<artifactId>wildfly-swarm-plugin</artifactId>
 				<version>${version.wildfly.swarm}</version>
+				<configuration>
+					<mainClass>com.redhat.developers.msa.hola.Main</mainClass>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -272,7 +279,9 @@
 									<AB_OFF>true</AB_OFF>
 									<JAVA_OPTIONS>-Xmx512m</JAVA_OPTIONS>
 								</env>
-								<ports><port>8080</port></ports>
+								<ports>
+									<port>8080</port>
+								</ports>
 							</build>
 						</image>
 					</images>
