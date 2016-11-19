@@ -1,6 +1,6 @@
 {
   "realm": "helloworld-msa",
-  "auth-server-url": "KEYCLOAK_SERVER",
+  "auth-server-url": "${env.KEYCLOAK_SERVER_URL}",
   "ssl-required": "external",
   "resource": "hola",
   "public-client": true

@@ -28,7 +28,6 @@ import org.wildfly.swarm.undertow.WARArchive;
  *
  */
 public class Main {
-    
 
     /**
      * @param args
@@ -36,7 +35,7 @@ public class Main {
      */
     public static void main(String[] args) throws Exception {
         // Instantiate the container
-        Swarm swarm = new Swarm();
+        Swarm swarm = new Swarm(args);
 
         // Create one or more deployments
         WARArchive deployment = ShrinkWrap.create(WARArchive.class);
@@ -44,18 +43,18 @@ public class Main {
         // Add resource to deployment
         deployment.addPackage(Main.class.getPackage());
         deployment.addAllDependencies();
-        
-        // Add Web resources 
+
+        // Add Web resources
         deployment.addAsWebResource(
-                new ClassLoaderAsset("index.html", Main.class.getClassLoader()), "index.html");
+            new ClassLoaderAsset("index.html", Main.class.getClassLoader()), "index.html");
         deployment.addAsWebInfResource(
             new ClassLoaderAsset("WEB-INF/web.xml", Main.class.getClassLoader()), "web.xml");
         deployment.addAsWebInfResource(
             new ClassLoaderAsset("WEB-INF/beans.xml", Main.class.getClassLoader()), "beans.xml");
-            
-        String keyCloakconfigFile = System.getenv("KEYCLOAK_FILE");
-        if (keyCloakconfigFile != null) {
-            deployment.addAsWebInfResource(new File(keyCloakconfigFile));
+
+        // If There's a KEYCLOAK_SERVER_URL env var, then read the file
+        if (System.getenv("KEYCLOAK_SERVER_URL") != null) {
+            deployment.addAsWebInfResource(new File(System.getenv("KEYCLOAK_FILE")));
         }
 
         swarm.start().deploy(deployment);
