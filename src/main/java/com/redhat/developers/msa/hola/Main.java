@@ -17,6 +17,7 @@
 package com.redhat.developers.msa.hola;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.ClassLoaderAsset;
@@ -54,7 +55,11 @@ public class Main {
 
         // If There's a KEYCLOAK_SERVER_URL env var, then read the file
         if (System.getenv("KEYCLOAK_SERVER_URL") != null) {
-            deployment.addAsWebInfResource(new File(System.getenv("KEYCLOAK_FILE")));
+            String keyCloackFile = System.getenv("KEYCLOAK_FILE");
+            if (null == keyCloackFile){
+                throw new FileNotFoundException("You set KEYCLOAK_SERVER_URL, but you have forgotten to specify the KEYCLOAK_FILE env var.");
+            }
+            deployment.addAsWebInfResource(new File(keyCloackFile));
         }
 
         swarm.start().deploy(deployment);
