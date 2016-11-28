@@ -54,10 +54,10 @@ public class Main {
             new ClassLoaderAsset("WEB-INF/beans.xml", Main.class.getClassLoader()), "beans.xml");
 
         // If There's a KEYCLOAK_SERVER_URL env var, then read the file
-        if (System.getenv("KEYCLOAK_SERVER_URL") != null) {
+        if (System.getenv("KEYCLOAK_AUTH_SERVER_URL") != null) {
             String keyCloackFile = System.getenv("KEYCLOAK_FILE");
             if (null == keyCloackFile){
-                throw new FileNotFoundException("You set KEYCLOAK_SERVER_URL, but you have forgotten to specify the KEYCLOAK_FILE env var.");
+                throw new FileNotFoundException("You set KEYCLOAK_AUTH_SERVER_URL, but you have forgotten to specify the KEYCLOAK_FILE env var.");
             }
             deployment.addAsWebInfResource(new File(keyCloackFile));
         }

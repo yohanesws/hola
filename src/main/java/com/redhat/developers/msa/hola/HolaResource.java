@@ -111,7 +111,7 @@ public class HolaResource {
     @GET
     @Path("/logout")
     @Produces("text/plain")
-    @ApiOperation("Returns a message that is only available for authenticated users")
+    @ApiOperation("Logout")
     public String logout() throws ServletException {
         servletRequest.logout();
         return "Logged out";
