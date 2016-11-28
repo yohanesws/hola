@@ -37,6 +37,7 @@ public class ZipkinResource {
         Builder builder = new Brave.Builder("hola");
         if (null == zipkingServer) {
             // Default configuration
+            System.out.println("No ZIPKIN_SERVER_URL defined. Printing zipkin traces to console.");
             return builder.build();
         } else {
             // Brave configured for a Server
