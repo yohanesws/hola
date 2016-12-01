@@ -102,7 +102,7 @@ public class HolaResource {
             KeycloakPrincipal<KeycloakSecurityContext> kp = (KeycloakPrincipal<KeycloakSecurityContext>) securityContext.getUserPrincipal();
 
             // this is how to get the real userName (or rather the login name)
-            userName = kp.getKeycloakSecurityContext().getIdToken().getPreferredUsername();
+            userName = kp.getKeycloakSecurityContext().getToken().getName();
         }
         return "This is a Secured resource. You are loged as " + userName;
 
