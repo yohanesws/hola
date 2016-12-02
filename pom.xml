@@ -43,7 +43,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- JBoss dependency versions -->
-		<version.wildfly.swarm>2016.11.0</version.wildfly.swarm>
+		<version.wildfly.swarm>2016.12.0</version.wildfly.swarm>
 
 		<!-- DeltaSpike - Used for configuration -->
 		<deltaspike.version>1.6.1</deltaspike.version>
@@ -126,6 +126,10 @@
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>jaxrs-cdi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>cdi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
