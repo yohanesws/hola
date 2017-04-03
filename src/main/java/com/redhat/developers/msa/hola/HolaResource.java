@@ -17,7 +17,6 @@
 package com.redhat.developers.msa.hola;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -31,29 +30,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
 import org.apache.deltaspike.core.api.config.ConfigResolver;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 
-import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.ServerSpan;
-import com.github.kristofa.brave.http.DefaultSpanNameProvider;
-import com.github.kristofa.brave.httpclient.BraveHttpRequestInterceptor;
-import com.github.kristofa.brave.httpclient.BraveHttpResponseInterceptor;
-
-import feign.Logger;
-import feign.Logger.Level;
-import feign.httpclient.ApacheHttpClient;
-import feign.hystrix.HystrixFeign;
-import feign.jackson.JacksonDecoder;
 import io.swagger.annotations.ApiOperation;
 
 @Path("/")
 public class HolaResource {
 
     @Inject
-    private Brave brave;
+    private AlohaService alohaService;
 
     @Context
     private SecurityContext securityContext;
@@ -85,7 +71,7 @@ public class HolaResource {
     public List<String> holaChaining() {
         List<String> greetings = new ArrayList<>();
         greetings.add(hola());
-        greetings.addAll(getNextService().aloha());
+        greetings.addAll(alohaService.aloha());
         return greetings;
     }
 
@@ -124,32 +110,4 @@ public class HolaResource {
     public String health() {
         return "I'm ok";
     }
-
-    /**
-     * This is were the "magic" happens: it creates a Feign, which is a proxy interface for remote calling a REST endpoint with
-     * Hystrix fallback support.
-     *
-     * @return The feign pointing to the service URL and with Hystrix fallback.
-     */
-    private AlohaService getNextService() {
-        final String serviceName = "aloha";
-        // This stores the Original/Parent ServerSpan from ZiPkin.
-        final ServerSpan serverSpan = brave.serverSpanThreadBinder().getCurrentServerSpan();
-        final CloseableHttpClient httpclient =
-            HttpClients.custom()
-                .addInterceptorFirst(new BraveHttpRequestInterceptor(brave.clientRequestInterceptor(), new DefaultSpanNameProvider()))
-                .addInterceptorFirst(new BraveHttpResponseInterceptor(brave.clientResponseInterceptor()))
-                .build();
-        String url = String.format("http://%s:8080/", serviceName);
-        return HystrixFeign.builder()
-            // Use apache HttpClient which contains the ZipKin Interceptors
-            .client(new ApacheHttpClient(httpclient))
-            // Bind Zipkin Server Span to Feign Thread
-            .requestInterceptor((t) -> brave.serverSpanThreadBinder().setCurrentSpan(serverSpan))
-            .logger(new Logger.ErrorLogger()).logLevel(Level.BASIC)
-            .decoder(new JacksonDecoder())
-            .target(AlohaService.class, url,
-                () -> Collections.singletonList("Aloha response (fallback)"));
-    }
-
 }

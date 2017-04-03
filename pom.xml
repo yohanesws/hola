@@ -56,9 +56,12 @@
 		<!-- maven-compiler-plugin -->
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
-		<netflix.feign.version>8.15.1</netflix.feign.version>
+		<openfeign.version>9.4.0</openfeign.version>
+		<openfeign.opentracing.version>0.0.1</openfeign.opentracing.version>
+		<opentracing.web.servlet.filter>0.0.4</opentracing.web.servlet.filter>
 		<hystrix.version>1.5.1</hystrix.version>
-		<brave.version>3.9.1</brave.version>
+		<brave.opentracing.version>0.19.0</brave.opentracing.version>
+		<zipkin.reporter.version>0.6.12</zipkin.reporter.version>
 		<swagger.version>1.5.8</swagger.version>
 
 
@@ -151,24 +154,19 @@
 
 		<!-- Feign -->
 		<dependency>
-			<groupId>com.netflix.feign</groupId>
-			<artifactId>feign-core</artifactId>
-			<version>${netflix.feign.version}</version>
+			<groupId>io.github.openfeign.opentracing</groupId>
+			<artifactId>feign-hystrix-opentracing</artifactId>
+			<version>${openfeign.opentracing.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.netflix.feign</groupId>
-			<artifactId>feign-hystrix</artifactId>
-			<version>${netflix.feign.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.netflix.feign</groupId>
+			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-jackson</artifactId>
-			<version>${netflix.feign.version}</version>
+			<version>${openfeign.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.netflix.feign</groupId>
+			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-httpclient</artifactId>
-			<version>${netflix.feign.version}</version>
+			<version>${openfeign.version}</version>
 		</dependency>
 
 
@@ -184,31 +182,28 @@
 			<version>${hystrix.version}</version>
 		</dependency>
 
-		<!-- Brave Zipkin -->
+		<!-- OpenTracing -->
 		<dependency>
-			<groupId>io.zipkin.brave</groupId>
-			<artifactId>brave-web-servlet-filter</artifactId>
-			<version>${brave.version}</version>
+			<groupId>io.opentracing</groupId>
+			<artifactId>opentracing-noop</artifactId>
+			<version>0.20.9</version>
 		</dependency>
 		<dependency>
-			<groupId>io.zipkin.brave</groupId>
-			<artifactId>brave-apache-http-interceptors</artifactId>
-			<version>${brave.version}</version>
+			<groupId>io.opentracing.contrib</groupId>
+			<artifactId>opentracing-web-servlet-filter</artifactId>
+			<version>0.0.4</version>
+		</dependency>
+
+		<!-- OpenTracing implementation - Zipkin -->
+		<dependency>
+			<groupId>io.opentracing.brave</groupId>
+			<artifactId>brave-opentracing</artifactId>
+			<version>${brave.opentracing.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.zipkin.brave</groupId>
-			<artifactId>brave-spancollector-http</artifactId>
-			<version>${brave.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>4.4.5</version>
+			<groupId>io.zipkin.reporter</groupId>
+			<artifactId>zipkin-sender-urlconnection</artifactId>
+			<version>${zipkin.reporter.version}</version>
 		</dependency>
 
 		<!-- Swagger -->
