@@ -266,7 +266,7 @@
 							<build>
 								<from>${docker.from}</from>
 								<assembly>
-									<basedir>/app</basedir>
+									<basedir>/deployments</basedir>
 									<inline>
 										<id>${project.artifactId}</id>
 										<files>
