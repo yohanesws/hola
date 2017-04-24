@@ -38,7 +38,6 @@ import com.uber.jaeger.samplers.ProbabilisticSampler;
 import com.uber.jaeger.senders.Sender;
 import com.uber.jaeger.senders.UDPSender;
 
-import brave.opentracing.BraveTracer;
 import feign.Logger;
 import feign.httpclient.ApacheHttpClient;
 import feign.hystrix.HystrixFeign;
@@ -48,10 +47,6 @@ import feign.opentracing.hystrix.TracingConcurrencyStrategy;
 import io.opentracing.NoopTracerFactory;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.web.servlet.filter.TracingFilter;
-import zipkin.Span;
-import zipkin.reporter.AsyncReporter;
-import zipkin.reporter.Reporter;
-import zipkin.reporter.urlconnection.URLConnectionSender;
 
 /**
  * This class uses CDI to alias Zipkin resources to CDI beans
@@ -64,25 +59,15 @@ public class TracingConfiguration {
     @Produces
     @Singleton
     public Tracer tracer() {
-        String tracingSystem = System.getenv("TRACING_SYSTEM");
-        if ("zipkin".equals(tracingSystem)) {
-            log.info("Using Zipkin tracer");
-            return zipkinTracer(System.getenv("ZIPKIN_SERVER_URL"));
-        } else if ("jaeger".equals(tracingSystem)) {
+        String jaegerURL = System.getenv("JAEGER_SERVER_URL");
+        if (jaegerURL != null) {
             log.info("Using Jaeger tracer");
-            return jaegerTracer(System.getenv("JAEGER_SERVER_URL"));
+            return jaegerTracer(jaegerURL);
         }
 
         log.info("Using Noop tracer");
         return NoopTracerFactory.create();
 
-    }
-
-    private Tracer zipkinTracer(String url) {
-        Reporter<Span> reporter = AsyncReporter.builder(URLConnectionSender.create(url + "/api/v1/spans"))
-                .build();
-        brave.Tracer braveTracer = brave.Tracer.newBuilder().localServiceName(SERVICE_NAME).reporter(reporter).build();
-        return BraveTracer.wrap(braveTracer);
     }
 
     private Tracer jaegerTracer(String url) {

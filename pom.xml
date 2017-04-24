@@ -61,9 +61,7 @@
 		<opentracing.version>0.21.0</opentracing.version>
 		<opentracing.web.servlet.filter.version>0.0.6</opentracing.web.servlet.filter.version>
 		<hystrix.version>1.5.1</hystrix.version>
-		<brave.opentracing.version>0.19.3</brave.opentracing.version>
 		<jaeger.version>0.18.0</jaeger.version>
-		<zipkin.reporter.version>0.6.12</zipkin.reporter.version>
 		<swagger.version>1.5.8</swagger.version>
 
 
@@ -194,18 +192,6 @@
 			<groupId>io.opentracing.contrib</groupId>
 			<artifactId>opentracing-web-servlet-filter</artifactId>
 			<version>${opentracing.web.servlet.filter.version}</version>
-		</dependency>
-
-		<!-- OpenTracing implementation - Zipkin -->
-		<dependency>
-			<groupId>io.opentracing.brave</groupId>
-			<artifactId>brave-opentracing</artifactId>
-			<version>${brave.opentracing.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.zipkin.reporter</groupId>
-			<artifactId>zipkin-sender-urlconnection</artifactId>
-			<version>${zipkin.reporter.version}</version>
 		</dependency>
 
 		<!-- OpenTracing implementation - Jaeger -->
