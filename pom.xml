@@ -63,38 +63,6 @@
 		<hystrix.version>1.5.1</hystrix.version>
 		<jaeger.version>0.18.0</jaeger.version>
 		<swagger.version>1.5.8</swagger.version>
-
-
-		<!-- fabric8 version -->
-		<fabric8.version>2.2.105</fabric8.version>
-		<docker.maven.plugin.version>0.15.8</docker.maven.plugin.version>
-
-		<!-- Docker & Fabric8 Configs -->
-		<docker.from>fabric8/java-jboss-openjdk8-jdk:1.2.1</docker.from>
-		<fabric8.dockerUser>redhatmsa/</fabric8.dockerUser>
-		<docker.image>${fabric8.dockerUser}${project.artifactId}:${project.version}</docker.image>
-		<docker.port.container.jolokia>8778</docker.port.container.jolokia>
-		<docker.port.container.http>8080</docker.port.container.http>
-
-		<!-- Openshift service customization -->
-		<fabric8.service.name>${project.artifactId}</fabric8.service.name>
-		<fabric8.service.port>8080</fabric8.service.port>
-		<fabric8.service.containerPort>8080</fabric8.service.containerPort>
-		<fabric8.service.type>LoadBalancer</fabric8.service.type>
-		<fabric8.label.group>msa</fabric8.label.group>
-		<fabric8.label.hystrix.enabled>true</fabric8.label.hystrix.enabled>
-		<fabric8.iconRef>icons/wildfly</fabric8.iconRef>
-
-		<!-- WildFly Swarm has issues with Jolokia. We have to disable it.
-			See: https://issues.jboss.org/browse/SWARM-204 -->
-		<fabric8.env.AB_OFF>true</fabric8.env.AB_OFF>
-		<fabric8.env.JAVA_OPTIONS>-Xmx512m</fabric8.env.JAVA_OPTIONS>
-
-		<!-- Readiness Probe -->
-		<fabric8.readinessProbe.httpGet.path>/api/health</fabric8.readinessProbe.httpGet.path>
-		<fabric8.readinessProbe.httpGet.port>8080</fabric8.readinessProbe.httpGet.port>
-		<fabric8.readinessProbe.initialDelaySeconds>5</fabric8.readinessProbe.initialDelaySeconds>
-		<fabric8.readinessProbe.timeoutSeconds>30</fabric8.readinessProbe.timeoutSeconds>
 	</properties>
 
 
@@ -244,47 +212,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>io.fabric8</groupId>
-				<artifactId>fabric8-maven-plugin</artifactId>
-				<version>${fabric8.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>io.fabric8</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>${docker.maven.plugin.version}</version>
-				<configuration>
-					<images>
-						<image>
-							<name>${docker.image}</name>
-							<build>
-								<from>${docker.from}</from>
-								<assembly>
-									<basedir>/deployments</basedir>
-									<inline>
-										<id>${project.artifactId}</id>
-										<files>
-											<file>
-												<source>${project.build.directory}/${project.build.finalName}-swarm.jar</source>
-												<outputDirectory>/</outputDirectory>
-											</file>
-										</files>
-									</inline>
-								</assembly>
-								<env>
-									<JAVA_APP_JAR>${project.build.finalName}-swarm.jar</JAVA_APP_JAR>
-									<ZIPKIN_SERVER_URL>http://zipkin-query:9411</ZIPKIN_SERVER_URL>
-									<AB_OFF>true</AB_OFF>
-									<JAVA_OPTIONS>-Xmx512m</JAVA_OPTIONS>
-								</env>
-								<ports>
-									<port>8080</port>
-								</ports>
-							</build>
-						</image>
-					</images>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
